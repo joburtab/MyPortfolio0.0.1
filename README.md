@@ -1,6 +1,5 @@
 # Software Developer Folio ⚡️  
-
-[![GitHub](https://img.shields.io/github/license/joburtab/MyPortfolio0.0.1?color=blue)](https://github.com/joburtab/MyPortfolio0.0.1/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/joburtab/MyPortfolio0.0.1?color=blue)](https://github.com/joburtab/MyPortfolio0.0.1/blob/main/LICENSE) 
 [![GitHub stars](https://img.shields.io/github/stars/joburtab/MyPortfolio0.0.1)](https://github.com/joburtab/MyPortfolio0.0.1/stargazers)  
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
@@ -41,7 +40,7 @@ Just update `src/portfolio.js` with your personal info and customize the theme u
 ✔️ Work Experience  
 ✔️ Open Source Projects Connected with GitHub  
 ✔️ Big Projects  
-✔️ Achievements & Certifications 🏆  
+✔️ Achievements & Certifications 
 ✔️ Blogs  
 ✔️ Talks  
 ✔️ Podcast  
