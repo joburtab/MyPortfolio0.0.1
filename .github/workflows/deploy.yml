@@ -1,44 +1,45 @@
 name: Build and Deploy
 
 on:
-  workflow_dispatch:        # manual trigger
+  workflow_dispatch:      # Manual trigger
   push:
     branches:
-      - main               # trigger on push to main
+      - main             # Trigger on push to main
   schedule:
-    - cron: "0 12 * * 1"   # optional weekly schedule
+    - cron: "0 12 * * 1" # Optional: scheduled deployment every Monday at 12:00 UTC
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           persist-credentials: false
 
-      # Setup Node.js 22
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 18.x
 
-      # Install dependencies
+      # Step 3: Install npm dependencies
       - name: Install dependencies
-      - run: npm install
+        run: npm install
 
-
-      # Build React app
-      - name: Build
+      # Step 4: Build the project
+      - name: Build React app
         run: npm run build
 
-      # Deploy to gh-pages
+      # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages       # deploy branch
-          folder: build          # folder to deploy
-          clean: true            # optional: clean old files
+          ssh-key: ${{ secrets.DEPLOY_KEY }}   # OR use token if you prefer
+          # If you want to use GITHUB_TOKEN instead of SSH key:
+          # token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: build
+          clean: true
