@@ -1,17 +1,7 @@
-# Software Developer Folio ⚡️  
-[![GitHub](https://img.shields.io/github/license/joburtab/MyPortfolio0.0.1?color=blue)](https://github.com/joburtab/MyPortfolio0.0.1/blob/main/LICENSE) 
-[![GitHub stars](https://img.shields.io/github/stars/joburtab/MyPortfolio0.0.1)](https://github.com/joburtab/MyPortfolio0.0.1/stargazers)  
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
----
 
 ## A clean, beautiful, and responsive portfolio template for Developers
 
-<p align="center">
-  <kbd>
-    <img src="https://user-images.githubusercontent.com/53429438/106779355-e9cd9e80-666c-11eb-9417-8a4b54441bc6.gif" alt="Portfolio Demo"/>
-  </kbd>
-</p>
 
 Just update `src/portfolio.js` with your personal info and customize the theme using `src/_globalColor.scss`. Feel free to personalize it as much as you want.  
 
