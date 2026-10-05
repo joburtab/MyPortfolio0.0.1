@@ -1,93 +1,97 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./RecentRepos.scss";
 
+const GITHUB_API_BASE = "https://api.github.com";
+
+async function fetchRecentRepositories() {
+  const response = await fetch(
+    `${GITHUB_API_BASE}/users/joburtab/repos?per_page=100&sort=pushed&type=owner`,
+    { headers: { Accept: "application/vnd.github+json" } }
+  );
+
+  if (!response.ok) {
+    throw new Error(`GitHub API responded with ${response.status}`);
+  }
+
+  const repositories = await response.json();
+
+  return repositories.map((repository) => ({
+    html_url: repository.html_url,
+    name: repository.name,
+    description: repository.description,
+    language: repository.language,
+    pushed_at: repository.pushed_at,
+  }));
+}
+
 export default function RecentRepos() {
+  const [repositories, setRepositories] = useState([]);
+  const [status, setStatus] = useState("loading");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchRecentRepositories()
+      .then((repos) => {
+        if (isMounted) {
+          setRepositories(repos);
+          setStatus("success");
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setStatus("error");
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="recent-repos" id="recent-repos">
       <div className="recent-repos-heading">
         <h2>Recent Repositories</h2>
         <p>Latest repos pushed by the current user.</p>
       </div>
-      <div className="recent-repos-list">
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/MyPortfolio0.0.1"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">MyPortfolio0.0.1</div>
-          <div className="recent-repo-desc">Authored the DeveloperFolio portfolio.</div>
-          <div className="recent-repo-meta">
-            <span>JavaScript</span>
-            <span>2026-09-23</span>
-          </div>
-        </a>
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/resume-job-MATCHER_Builder"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">resume-job-MATCHER_Builder</div>
-          <div className="recent-repo-desc">AI-powered resume builder.</div>
-          <div className="recent-repo-meta">
-            <span>Python</span>
-            <span>2026-07-15</span>
-          </div>
-        </a>
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/odin-recipes"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">odin-recipes</div>
-          <div className="recent-repo-desc">Practical recipe app.</div>
-          <div className="recent-repo-meta">
-            <span>HTML</span>
-            <span>2026-06-13</span>
-          </div>
-        </a>
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/javascript"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">javascript</div>
-          <div className="recent-repo-desc">JavaScript fundamentals.</div>
-          <div className="recent-repo-meta">
-            <span>JavaScript</span>
-            <span>2026-01-14</span>
-          </div>
-        </a>
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/CodvedaProjects-To-Do-List-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">CodvedaProjects-To-Do-List-app</div>
-          <div className="recent-repo-desc">To-Do list application.</div>
-          <div className="recent-repo-meta">
-            <span>JavaScript</span>
-            <span>2025-12-29</span>
-          </div>
-        </a>
-        <a
-          className="recent-repo-item"
-          href="https://github.com/joburtab/ResponsiveLayout_Task1"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="recent-repo-name">ResponsiveLayout_Task1</div>
-          <div className="recent-repo-desc">Responsive layout practice.</div>
-          <div className="recent-repo-meta">
-            <span>HTML</span>
-            <span>2025-12-29</span>
-          </div>
-        </a>
-      </div>
+
+      {status === "loading" && (
+        <div className="recent-repos-load">Loading repositories...</div>
+      )}
+
+      {status === "success" && repositories.length === 0 && (
+        <div className="recent-repos-empty">No repositories found.</div>
+      )}
+
+      {status === "success" && (
+        <div className="recent-repos-list">
+          {repositories.map((repository) => (
+            <a
+              key={repository.html_url}
+              className="recent-repo-item"
+              href={repository.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="recent-repo-name">{repository.name}</div>
+              <div className="recent-repo-desc">
+                {repository.description || "No description provided."}
+              </div>
+              <div className="recent-repo-meta">
+                <span>{repository.language || "Unknown"}</span>
+                <span>{repository.pushed_at}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="recent-repos-error">
+          Failed to load repositories. Please try again later.
+        </div>
+      )}
     </div>
   );
 }
